@@ -1,0 +1,22 @@
+{
+  "name": "lab-08-rest",
+  "version": "1.0.0",
+  "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API ======",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyleeAndrews/lab-08-rest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyleeAndrews/lab-08-rest/issues"
+  },
+  "homepage": "https://github.com/RyleeAndrews/lab-08-rest#readme",
+  "dependencies": {
+    "querystring": "^0.2.0"
+  }
+}
