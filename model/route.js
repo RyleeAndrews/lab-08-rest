@@ -12,26 +12,34 @@ var storageOfRouters = {};
 
 
 router.post('/api/Sushi', (req,res) => {
-  let body = req.body;
-  if(!req.body.content){
-    res.writeHead(400, {
-      'Content-Type': 'text/plain',
-    });
-    res.write('bad request');
-    res.end();
-    return;
-  }
-  let sushi = new Sushi();
-  storageOfRouters[sushi.uuidv4] = sushi;
+  let body = new Sushi();
+  req.on('data', function(data){
+    body += data.toString();
+  });
+  req.on('end', function(){
+    let json;
+    try {
+      json = JSON.stringify(body);
+    }catch(e){
+      if(!req.body.content){
+        res.writeHead(400, {
+          'Content-Type': 'text/plain',
+        });
+        res.write('bad request');
+        res.end();
+        return;
+      }}
+  });
+  storageOfRouters[body.uuid] = body;
   res.writeHead(200, {
     'Content-Type': 'application/json',
   });
-  res.write(JSON.stringify(sushi));
+  res.write(JSON.stringify(body));
   res.end();
 });
 
 router.get('/api/Sushi', (req,res) => {
-  if(!req.url.query.id){
+  if(!req.url.query.uuid){
     res.writeHead(400, {
       'Content-Type': 'text/plain',
     });
@@ -39,7 +47,7 @@ router.get('/api/Sushi', (req,res) => {
     res.end();
     return;
   }
-  if(!storageOfRouters[req.url.query.id]){
+  if(!storageOfRouters[req.url.query.uuid]){
     res.writeHead(404, {
       'Content-Type': 'text/plain',
     });
@@ -50,7 +58,7 @@ router.get('/api/Sushi', (req,res) => {
   res.writeHead(200,{
     'Content-Type': 'application/json',
   });
-  res.write(JSON.stringify(storageOfRouters[req.url.query.id]));
+  res.write(JSON.stringify(storageOfRouters[req.url.query.uuid]));
   res.end();
 });
 
