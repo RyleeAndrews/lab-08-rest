@@ -12,7 +12,7 @@ var storageOfRouters = {};
 
 
 router.post('/api/Sushi', (req,res) => {
-  let body = new Sushi();
+  let body = new Sushi(uuidv4(),'california roll', 'crab');
   req.on('data', function(data){
     body += data.toString();
   });
@@ -30,7 +30,6 @@ router.post('/api/Sushi', (req,res) => {
         return;
       }}
   });
-  storageOfRouters[body.uuid] = body;
   res.writeHead(200, {
     'Content-Type': 'application/json',
   });
