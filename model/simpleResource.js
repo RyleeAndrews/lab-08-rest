@@ -1,8 +1,8 @@
 'use strict';
 
 const uuidv4 = require('uuid/v4');
-module.exports = function Sushi(id,name,fish){
-  this.id = id;
+module.exports = function Sushi(name,fish){
+  this.id = uuidv4();
   this.name = name;
   this.fish = fish;
 };

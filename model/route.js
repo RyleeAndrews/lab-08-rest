@@ -4,41 +4,40 @@
 const http = require('http');
 const router = require('../lib/router.js');
 const Sushi = require('../model/simpleResource.js');
-const uuidv4 = require('uuid/v4');
-const urlParser = require('../lib/urlparser.js');
-const requestParser = require('../lib/request-parser.js');
+
+
 
 var storageOfRouters = {};
 
 
 router.post('/api/Sushi', (req,res) => {
-  let body = new Sushi(uuidv4(),'california roll', 'crab');
-  req.on('data', function(data){
-    body += data.toString();
-  });
-  req.on('end', function(){
-    let json;
-    try {
-      json = JSON.stringify(body);
-    }catch(e){
-      if(!req.body.content){
+  const { name, fish} = req.body;
+  let sushi = new Sushi(name,fish);
+
+      if(!(req.body.name && req.body.fish)){
         res.writeHead(400, {
           'Content-Type': 'text/plain',
         });
         res.write('bad request');
         res.end();
         return;
-      }}
-  });
+      }
+
+  storageOfRouters[sushi.id] = sushi;
+
   res.writeHead(200, {
     'Content-Type': 'application/json',
   });
-  res.write(JSON.stringify(body));
+  res.write(JSON.stringify(sushi));
   res.end();
 });
 
 router.get('/api/Sushi', (req,res) => {
-  if(!req.url.query.uuid){
+
+
+  let id = req.url && req.url.query && req.url.query.id;
+  let checkID = req.url.path.split('=')[1];
+  if(!checkID){
     res.writeHead(400, {
       'Content-Type': 'text/plain',
     });
@@ -46,7 +45,8 @@ router.get('/api/Sushi', (req,res) => {
     res.end();
     return;
   }
-  if(!storageOfRouters[req.url.query.uuid]){
+
+  if(!storageOfRouters[checkID]){
     res.writeHead(404, {
       'Content-Type': 'text/plain',
     });
@@ -57,7 +57,7 @@ router.get('/api/Sushi', (req,res) => {
   res.writeHead(200,{
     'Content-Type': 'application/json',
   });
-  res.write(JSON.stringify(storageOfRouters[req.url.query.uuid]));
+  res.write(JSON.stringify(storageOfRouters[checkID]));
   res.end();
 });
 
