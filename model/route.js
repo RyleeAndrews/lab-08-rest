@@ -30,13 +30,16 @@ router.post('/api/Sushi', (req,res) => {
   });
   res.write(JSON.stringify(sushi));
   res.end();
+  return;
 });
 
 router.get('/api/Sushi', (req,res) => {
 
-
   let id = req.url && req.url.query && req.url.query.id;
+  console.log(req.url);
+  console.log(storageOfRouters);
   let checkID = req.url.path.split('=')[1];
+  console.log(checkID);
   if(!checkID){
     res.writeHead(400, {
       'Content-Type': 'text/plain',
@@ -59,10 +62,12 @@ router.get('/api/Sushi', (req,res) => {
   });
   res.write(JSON.stringify(storageOfRouters[checkID]));
   res.end();
+  return;
 });
 
 router.delete('/api/Sushi', (req,res) => {
-  if(!req.url.query.id){
+  let checkID = req.url.path.split('=')[1];
+  if(!checkID){
     res.writeHead(404, {
       'Content-Type': 'text/plain',
     });
@@ -70,11 +75,11 @@ router.delete('/api/Sushi', (req,res) => {
     res.end();
     return;
   }
-  delete storageOfRouters[req.url.query.id];
+  delete storageOfRouters[checkID];
   res.writeHead(204, {
     'Content-Type': 'text/plain',
   });
-  res.write(JSON.stringify(storageOfRouters[req.url.query.id]));
+  res.write(JSON.stringify(storageOfRouters[checkID]));
   res.end();
 });
 
